@@ -50,7 +50,6 @@ public class ReceiveContainersListBehaviour extends Behaviour {
                 items.iterator().forEachRemaining(i -> {
                     locations.add((Location) i);
                 });
-                locations.remove(myAgent.here());
 
                 myAgent.setLocations(locations);
                 myAgent.addBehaviour(new MigratingBehaviour(myAgent));
