@@ -10,6 +10,7 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import lombok.extern.java.Log;
 import org.agents.MigratingAgent;
@@ -19,6 +20,7 @@ import org.agents.MigratingAgent;
 public class ReceiveContainersListBehaviour extends Behaviour {
 
     private boolean done = false;
+    AtomicInteger index;
 
     protected final MigratingAgent myAgent;
 
@@ -26,10 +28,11 @@ public class ReceiveContainersListBehaviour extends Behaviour {
 
     protected MessageTemplate mt;
 
-    public ReceiveContainersListBehaviour(MigratingAgent agent, String conversationId) {
+    public ReceiveContainersListBehaviour(MigratingAgent agent, String conversationId, AtomicInteger index_) {
         super(agent);
         myAgent = agent;
         this.conversationId = conversationId;
+        index = index_;
     }
 
     @Override
@@ -52,7 +55,12 @@ public class ReceiveContainersListBehaviour extends Behaviour {
                 });
 
                 myAgent.setLocations(locations);
-                myAgent.addBehaviour(new MigratingBehaviour(myAgent));
+                myAgent.addBehaviour(new MigratingBehaviour(myAgent, index.get()));
+                if(index.get() >= items.size()-1){
+                    index.set(0);
+                } else {
+                    index.set(index.get()+1);
+                }
             } catch (Codec.CodecException | OntologyException ex) {
                 log.log(Level.SEVERE, null, ex);
             }

@@ -5,30 +5,29 @@ import jade.content.lang.sl.SLCodec;
 import jade.content.onto.OntologyException;
 import jade.content.onto.basic.Action;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.JADEAgentManagement.QueryPlatformLocationsAction;
 import jade.domain.mobility.MobilityOntology;
 import jade.lang.acl.ACLMessage;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
+import jade.lang.acl.MessageTemplate;
 import lombok.extern.java.Log;
-import org.agents.MigratingAgent;
+
+import java.util.UUID;
+import java.util.logging.Level;
+
 
 @Log
-public class RequestContainersListBehaviour extends CyclicBehaviour {
+public class NewMigratingBehaviour  extends CyclicBehaviour {
 
-    protected final MigratingAgent myAgent;
-    AtomicInteger index = new AtomicInteger(0);
-
-    public RequestContainersListBehaviour(MigratingAgent agent) {
-        super(agent);
-        myAgent = agent;
-    }
-
+    boolean waiting = false;
     @Override
     public void action() {
-        QueryPlatformLocationsAction query = new QueryPlatformLocationsAction();
+
+        if(waiting){
+
+
+        }
+
+       QueryPlatformLocationsAction query = new QueryPlatformLocationsAction();
         Action action = new Action(myAgent.getAMS(), query);
 
         String conversationId = UUID.randomUUID().toString();
@@ -42,10 +41,14 @@ public class RequestContainersListBehaviour extends CyclicBehaviour {
         try {
             myAgent.getContentManager().fillContent(request, action);
             myAgent.send(request);
-            myAgent.addBehaviour(new ReceiveContainersListBehaviour(myAgent, conversationId, index));
+            MessageTemplate mt = MessageTemplate.MatchConversationId(conversationId);
+            ACLMessage msg = myAgent.receive(mt);
+
         } catch (Codec.CodecException | OntologyException ex) {
-            log.log(Level.WARNING, ex.getMessage(), ex);
+            //log.log(Level.WARNING, ex.getMessage(), ex);
         }
     }
-}
 
+
+
+}

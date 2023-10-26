@@ -31,7 +31,7 @@ public class MigratingAgent extends Agent {
     @Override
     protected void afterMove() {
         super.afterMove();
-        //registerCodecs();
+        registerCodecs();
         //resume threads
         JOptionPane.showMessageDialog(null, "Przybywam!");
     }
