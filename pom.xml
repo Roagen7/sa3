@@ -11,7 +11,7 @@
     <properties>
         <maven.compiler.source>18</maven.compiler.source>
         <maven.compiler.target>18</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <mainClass>jade.Boot</mainClass>
     </properties>
     <dependencies>
         <dependency>
@@ -19,6 +19,15 @@
             <artifactId>lombok</artifactId>
             <version>1.18.26</version>
         </dependency>
+        <dependency>
+            <groupId>com.tilab.jade</groupId>
+            <artifactId>jade</artifactId>
+            <version>4.3.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/jade.jar</systemPath>
+        </dependency>
     </dependencies>
+
+
 
 </project>
